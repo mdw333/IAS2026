@@ -1,0 +1,24 @@
+colortype
+  enum Color
+  fn to_color32(mycolor: Color) -> egui::Color32  // changes Color to Color32
+
+nimsequence
+  fn new(mypoint: Point) -> Self   // creates a new NimSequence from a Point
+
+point
+  fn new(x: u64, y: u64, z: u64) -> Self        // creates a new Point
+  fn as_tuple(&self) -> (u64, u64, u64)         // make a tuple from a Point
+  std::ops::Add for Point  // add two Points
+  std::ops::Sub for Point  // subtact two Points
+  std::ops::Mul<u64> for Point  // multiply a Point by a scalar multiple
+  std::ops::Div<u64> for Point  // divide a Point by a scalar multiple
+
+
+
+
+line
+  fn new(a: i64, b: i64, c: i64) -> Self  // creates a new Line
+
+newutilities
+  fn gcd(mut n: u64, mut m: u64) -> u64  // gcd of two integers
+

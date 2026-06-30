@@ -1,0 +1,9 @@
+[workspace]
+resolver = "3"
+members = [
+	"crates/subtractioncore",
+	"crates/newtriangleviewer",
+	"crates/mdwsandboxcrate",
+	"crates/audreysandboxcrate",
+]
+
