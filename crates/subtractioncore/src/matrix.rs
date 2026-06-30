@@ -147,6 +147,13 @@ impl Matrix {
     pub fn third_column(&self) -> Line {
         Line { a: self.a13, b: self.a23, c: self.a33 }
     }
+
+    /// prints the rows of a 3-by-3 matrix
+    ///impl std::fmt::Debug for Matrix {
+    ///    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    pub fn as_string(&self) -> String {
+        format!("{} {} {}\n{} {} {}\n{} {} {}\n", self.a11, self.a12, self.a13, self.a21, self.a22, self.a23, self.a31, self.a32, self.a33)
+    }
     
 }
 
