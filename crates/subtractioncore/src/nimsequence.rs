@@ -1,5 +1,6 @@
 use std::cmp::min;
 use std::collections::VecDeque;
+use crate::point::*;
 
 /// A SequenceNode stores a nim value (0, 1, 2, or 3)
 /// and a number of times that the nim value is repeated (i.e., the exponent)
@@ -257,23 +258,22 @@ impl NimSequence {
         }
     }
 
-
-    pub fn new(x: u64, y: u64, z: u64) -> Self {
+    pub fn new( mypoint: Point ) -> Self {
 
         // need to actually build the nim sequence of values here
         let mut mysequence = VecDeque::new();
         let myperiod;
 
-        let max_len = NimSequence::max_period_len(x, y, z);
+        let max_len = NimSequence::max_period_len( mypoint.x, mypoint.y, mypoint.z );
         let mut current_len = max_len;
         let mut kmp_starting_position = 0;
 
         // Prepopulate sequence with values far enough that any lookbehind will succeed.
         mysequence.push_back(SequenceNode::new(u8::MAX, max_len));
 
-        let mut x_cur = SequenceCursor::new(max_len, x);
-        let mut y_cur = SequenceCursor::new(max_len, y);
-        let mut z_cur = SequenceCursor::new(max_len, z);
+        let mut x_cur = SequenceCursor::new(max_len, mypoint.x);
+        let mut y_cur = SequenceCursor::new(max_len, mypoint.y);
+        let mut z_cur = SequenceCursor::new(max_len, mypoint.z);
 
         loop {
             // `new_length_generated` is the new length generated in this iteration.
@@ -297,7 +297,7 @@ impl NimSequence {
                 actual_len += mysequence[i].times_repeated;
             }
 
-            if actual_len >= z {
+            if actual_len >= mypoint.z {
                 let runs_in_period = mysequence.len() - kmp_starting_position - len;
                 myperiod = current_len - actual_len;
 
@@ -320,5 +320,6 @@ impl NimSequence {
 
         NimSequence { seq: mysequence, preperiodlength: mypreperiod, periodlength: myperiod }
     }
+
 }
 

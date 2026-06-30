@@ -48,7 +48,7 @@ impl Point {
     /// for an x,y,z, triple with known period length,
     /// return the color associated with the x,y,z triple
     pub fn get_color(&self) -> Color {
-        let period_len = NimSequence::new( self.x, self.y, self.z ).periodlength;
+        let period_len = NimSequence::new( *self ).periodlength;
         if self.z == self.x + self.y {
             Color::Gray
         } else if period_len == gcd(gcd(self.x + self.y, self.x + self.z), self.y + self.z) {

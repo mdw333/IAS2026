@@ -17,7 +17,7 @@ fn main() {
     println!("The point I want to study is {:?}", Point::new(1,5,19));
     println!("Divide the point by 7 to get {:?}", (Point::new(7,35,700) / 7).as_tuple());
     println!("Multiply the point by 3 to get {:?}", (Point::new(1,5,19) * 3).as_tuple());
-    let mynewsequence = NimSequence::new( 2,4,7 );
+    let mynewsequence = NimSequence::new( Point::new(2,4,7) );
 
     // let's say we want the fourth element nim value type:
     println!("The value type is {}", mynewsequence.seq[4].value);
@@ -40,7 +40,7 @@ fn main() {
     for z in y+1..9 {
     if gcd(gcd(x,y),z) == 1 {        
 //        println!("{} {} {}", x, y, z);
-        let myvalues = NimSequence::new( x,y,z );
+        let myvalues = NimSequence::new( Point::new(x,y,z) );
         let p = myvalues.periodlength;
         let pp = myvalues.preperiodlength;
         let mycolor = Point::new( x,y,z ).get_color();
