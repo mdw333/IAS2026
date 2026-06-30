@@ -45,6 +45,8 @@ fn main() {
     }
     }
     }
-    
+
+    println!("The matrix I want to study is {}", Matrix::new_from_point(Point::new(1,5,19), Point::new(3,17,100), Point::new(10,20,30)));
+
 }
 
