@@ -13,7 +13,7 @@ fn main() {
     println!("Hello there");
     println!("The gcd of 24 and 100 is {}", gcd(24,100));
     let mycolor = Color::Orange;
-    println!("The color is {:?}", to_color32(mycolor));
+    println!("The color is {:?}", mycolor.to_color32());
     println!("The point I want to study is {:?}", Point::new(1,5,19));
     println!("Divide the point by 7 to get {:?}", (Point::new(7,35,700) / 7).as_tuple());
     println!("Multiply the point by 3 to get {:?}", (Point::new(1,5,19) * 3).as_tuple());
