@@ -67,6 +67,118 @@ pub struct NimSequence {pub seq: VecDeque<SequenceNode>, pub preperiodlength: u6
 
 impl NimSequence {
 
+    /// compress a string, using a given block size;
+    /// we return a boolean value that confirms whether or not a block was able
+    /// to be compressed (true is a block was compressed, and false otherwise)
+    pub fn compress_string_specific_block_size(stringseq: &mut VecDeque<String>, blocksize: u64) -> bool {
+        let mut returnvalue = false;
+        let mut keepsearching = 1;
+        let mut texvalues0 = 0;
+        let mut texvalues1: usize;
+        let mut texvalues2: usize;
+
+        while keepsearching == 1 {
+            texvalues1 = texvalues0;
+            texvalues2 = texvalues0;
+        
+            if texvalues2 == stringseq.len() {
+                keepsearching = 0;
+            }
+
+            let mut k = 0;
+            while (k < blocksize)&&(keepsearching==1) {
+                texvalues2 += 1;
+                if texvalues2 == stringseq.len() {
+                    keepsearching = 0;
+                }
+                k += 1;
+            }
+            if keepsearching == 1 {
+                let mut agreementcounter = 0;
+                while (texvalues2 < stringseq.len()) && (stringseq[texvalues1] == stringseq[texvalues2]) {
+                    agreementcounter += 1;
+                    texvalues1 += 1;
+                    texvalues2 += 1;
+                }
+                let numberofblocksmatched = ((agreementcounter as f64) / (blocksize as f64)).floor() as u64;
+                if numberofblocksmatched >= 1 {
+                    returnvalue = true;
+                    texvalues1 = texvalues0;
+                    texvalues2 = texvalues0;
+            
+                    let mut mynewstring = String::from("(");
+                    for _ in 0..blocksize {
+                        mynewstring = format!("{}{}", mynewstring, stringseq[texvalues1]);
+                        texvalues1 += 1;
+                    }
+                    mynewstring = format!("{}{}{}{}", mynewstring, ")^{", numberofblocksmatched+1, "}");
+            
+                    texvalues1 = texvalues0;
+                    stringseq[texvalues1] = mynewstring;
+
+                    texvalues2 += (numberofblocksmatched as usize + 1)*blocksize as usize;
+
+                    // it is safe to delete everything between texvalues1 and texvalues2
+                    let mut tempstringseq: VecDeque<String> = VecDeque::new();
+                    for m in 0..texvalues1+1 {
+                        let tempstring = stringseq[m].clone();
+                        tempstringseq.push_back(tempstring);
+                    }
+                    for m in texvalues2..stringseq.len() {
+                        let tempstring = stringseq[m].clone();
+                        tempstringseq.push_back(tempstring);
+                    }
+                    while stringseq.len() > 0 {
+                        stringseq.pop_front();
+                    }
+                    while tempstringseq.len() > 0 {
+                        if let Some(littlenode) = tempstringseq.pop_front() {
+                            stringseq.push_back(littlenode);
+                        }
+                    }
+                    texvalues2 -= texvalues2 - texvalues1 - 1;
+                    //texvalues1 = texvalues2;
+                    texvalues0 = texvalues2;
+                }
+                else {
+                    if texvalues0 < stringseq.len() {
+                        texvalues0 += 1;
+                    }
+                }
+            }
+        }
+        returnvalue
+    }
+
+    /// compress a string across all potential block sizes
+    pub fn compress_string_all_block_sizes(stringseq: &mut VecDeque<String>) {
+        let mut blocksizereached = 0;
+        let maxblocksize = 500;
+        let mut blocksize = 2;
+        while blocksize <= maxblocksize {
+            let myresults = NimSequence::compress_string_specific_block_size(stringseq, blocksize);
+            if myresults == true {
+                if blocksize > blocksizereached {
+                    blocksizereached = blocksize;
+                }
+                blocksize = 2;
+            }
+            else {
+                blocksize += 1;
+            }
+        }
+    }
+
+
+    /// convert a sequence of SeqNode values to String values
+    pub fn to_strings (&self, mychar: char) -> VecDeque<String> {
+        let mut mystrings = VecDeque::new();
+        for i in 0..self.seq.len() {
+            mystrings.push_back(format!("{}{}{} ", self.seq[i].value, mychar, self.seq[i].times_repeated));
+        }
+        return mystrings;
+    }
+    
     /// after putting the Nim values into the sequence,
     /// we remove remove the Nim values that go beyond the periodic part
     /// and we also remove the buffer (dummy) node from the front of the sequence
@@ -258,6 +370,25 @@ impl NimSequence {
         }
     }
 
+    /// print the full output of a Nim sequence, without any compression
+    /// pub fn print_the_full_output_in_a_seq(&self, seq: &mut VecDeque<SeqNode>, myperiod: u64) {
+    /// mychar is the character between each value and the times_repeated
+    /// for instance, mychar could be * or ^ (as two natural examples)
+    pub fn print_triplecheck_format( mypoint: Point, mychar: char ) {
+        let mysequence = NimSequence::new( mypoint );
+        let myseq = mysequence.seq;
+        let myperiod = mysequence.periodlength;
+        print!("x={} y={} z={} p={} ", mypoint.x, mypoint.y, mypoint.z, myperiod);
+        for i in 0..myseq.len() {
+            if myseq[i].value == u8::MAX {
+                print!("( ");
+            } else {
+                print!("{}{}{} ", myseq[i].value, mychar, myseq[i].times_repeated);
+            }
+        }
+        println!(")");
+    }
+    
     pub fn new( mypoint: Point ) -> Self {
 
         // need to actually build the nim sequence of values here
@@ -322,4 +453,5 @@ impl NimSequence {
     }
 
 }
+
 

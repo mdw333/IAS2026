@@ -45,6 +45,33 @@ impl Point {
         )
     }
 
+    /// when analyzing the sequence of all nim values for an x,y,z triple,
+    /// and also when printing the output of all the nim values,
+    /// it is helping to split the output into blocks;
+    /// this function specifies how wide each block should be,
+    /// i.e., what length of nim values (altogether, once uncompressed per line)
+    /// should be on each line of output.
+    /// Notice that the default is to use the period length for the block length,
+    /// but with the exceptions that, for green, orange, purple, and white,
+    /// we use longer block lengths; using the period by itself is too short!
+    pub fn get_blocklength(&self) -> u64 {
+        let myperiod = NimSequence::new( *self ).periodlength;
+        let mut myblocklength = myperiod;
+        if myperiod == gcd(gcd(self.x + self.y, self.x + self.z), self.y + self.z) {
+            myblocklength = u64::MAX;
+        } else if myperiod == gcd(self.x + self.z, self.y + self.z) {
+            // for green
+            myblocklength = self.x + self.z; // instead, use the length for blue
+        } else if myperiod == gcd(self.x + self.y, self.y + self.z) {
+            // for orange
+            myblocklength = self.y + self.z; // instead, use the length for yellow
+        } else if myperiod == gcd(self.x + self.y, self.x + self.z) {
+            // for purple
+            myblocklength = self.x + self.y; // instead, use the length for red
+        }
+        return myblocklength;
+    }
+    
     /// for an x,y,z, triple with known period length,
     /// return the color associated with the x,y,z triple
     pub fn get_color(&self) -> Color {

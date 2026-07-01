@@ -29,6 +29,12 @@ fn main() {
     println!("The preperiod length is {:?}", mynewsequence.preperiodlength);
     println!("The period length is {:?}", mynewsequence.periodlength);
     println!("The nim sequence is {:?}", mynewsequence.seq);
+
+    let mystrings = mynewsequence.to_strings('^');
+    for i in 0..mystrings.len() {
+        print!("we have {}", mystrings[i]);
+    }
+    println!("");
     
     println!("The line I want to study is {:?}", Line::new(-19,3,-110).as_string());
     println!("The line I want to study is {:?}", Line::new(i64::MAX,3,-110).as_string());
@@ -68,6 +74,14 @@ fn main() {
     println!("Locally, it has orange line {:?}", Point::new(1,5,19).orange_line().as_string());
     println!("Locally, it has purple line {:?}", Point::new(1,5,19).purple_line().as_string());
     println!("Locally, it has green line {:?}", Point::new(1,5,19).green_line().as_string());
+
+    let mynewsequence = NimSequence::new( Point::new(61,5556,849287) );
+    //println!("The nim sequence is {:?}", mynewsequence.seq);
+
+    let mut compressedsequence = mynewsequence.to_strings('^');
+    NimSequence::compress_string_all_block_sizes(&mut compressedsequence);
+            
+    println!("The compressed nim sequence is {:?}", compressedsequence);
 
 }
 

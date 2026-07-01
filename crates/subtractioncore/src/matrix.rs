@@ -75,15 +75,15 @@ impl Matrix {
 
     pub fn divide_by_integer(&mut self, mydivisor: i64) -> Matrix {
 	let mut myflag = true;
-	if self.first_row().a % mydivisor != 0 { myflag = false; }
-	if self.first_row().b % mydivisor != 0 { myflag = false; }
-	if self.first_row().c % mydivisor != 0 { myflag = false; }
-	if self.second_row().a % mydivisor != 0 { myflag = false; }
-	if self.second_row().b % mydivisor != 0 { myflag = false; }
-	if self.second_row().c % mydivisor != 0 { myflag = false; }
-	if self.third_row().a % mydivisor != 0 { myflag = false; }
-	if self.third_row().b % mydivisor != 0 { myflag = false; }
-	if self.third_row().c % mydivisor != 0 { myflag = false; }
+	if self.first_row_as_line().a % mydivisor != 0 { myflag = false; }
+	if self.first_row_as_line().b % mydivisor != 0 { myflag = false; }
+	if self.first_row_as_line().c % mydivisor != 0 { myflag = false; }
+	if self.second_row_as_line().a % mydivisor != 0 { myflag = false; }
+	if self.second_row_as_line().b % mydivisor != 0 { myflag = false; }
+	if self.second_row_as_line().c % mydivisor != 0 { myflag = false; }
+	if self.third_row_as_line().a % mydivisor != 0 { myflag = false; }
+	if self.third_row_as_line().b % mydivisor != 0 { myflag = false; }
+	if self.third_row_as_line().c % mydivisor != 0 { myflag = false; }
 	if myflag == false {
 	    println!("we have a matrix determinant error!");
 	}
@@ -100,9 +100,9 @@ impl Matrix {
     }
 
     pub fn multiply_on_right_by_columnvec(&mut self, mycolumnvec: Line) -> Line {
-        Line::new(self.first_row().dot(&mycolumnvec),
-	    self.second_row().dot(&mycolumnvec),
-	    self.third_row().dot(&mycolumnvec))
+        Line::new(self.first_row_as_line().dot(&mycolumnvec),
+	    self.second_row_as_line().dot(&mycolumnvec),
+	    self.third_row_as_line().dot(&mycolumnvec))
     }
 
     pub fn multiply_on_left_by_point(&mut self, mypoint: Point) -> Point {
@@ -112,7 +112,7 @@ impl Matrix {
 	    self.third_column().dot(&myline) as u64)
     }
     
-    pub fn first_row(&self) -> Line {
+    pub fn first_row_as_line(&self) -> Line {
         Line { a: self.a11, b: self.a12, c: self.a13 }
     }
     
@@ -120,7 +120,7 @@ impl Matrix {
         Point { x: self.a11 as u64, y: self.a12 as u64, z: self.a13 as u64 }
     }
     
-    pub fn second_row(&self) -> Line {
+    pub fn second_row_as_line(&self) -> Line {
         Line { a: self.a21, b: self.a22, c: self.a23 }
     }
 
@@ -128,7 +128,7 @@ impl Matrix {
         Point { x: self.a21 as u64, y: self.a22 as u64, z: self.a23 as u64 }
     }
 
-    pub fn third_row(&self) -> Line {
+    pub fn third_row_as_line(&self) -> Line {
         Line { a: self.a31, b: self.a32, c: self.a33 }
     }
     
@@ -164,15 +164,15 @@ impl std::ops::Mul for Matrix {
 
     fn mul(self, other: Self) -> Self::Output {
         Matrix::new_from_columnvec(
-	    Line::new(self.first_row().dot(&other.first_column()),
-		      self.second_row().dot(&other.first_column()),
-		      self.third_row().dot(&other.first_column())),
-	    Line::new(self.first_row().dot(&other.second_column()),
-		      self.second_row().dot(&other.second_column()),
-		      self.third_row().dot(&other.second_column())),
-	    Line::new(self.first_row().dot(&other.third_column()),
-		      self.second_row().dot(&other.third_column()),
-		      self.third_row().dot(&other.third_column())))
+	    Line::new(self.first_row_as_line().dot(&other.first_column()),
+		      self.second_row_as_line().dot(&other.first_column()),
+		      self.third_row_as_line().dot(&other.first_column())),
+	    Line::new(self.first_row_as_line().dot(&other.second_column()),
+		      self.second_row_as_line().dot(&other.second_column()),
+		      self.third_row_as_line().dot(&other.second_column())),
+	    Line::new(self.first_row_as_line().dot(&other.third_column()),
+		      self.second_row_as_line().dot(&other.third_column()),
+		      self.third_row_as_line().dot(&other.third_column())))
     }
 }
 
