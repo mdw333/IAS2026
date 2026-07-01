@@ -9,5 +9,5 @@ pub mod regiontype;
 pub mod hexagon;
 pub mod region;
 pub mod visualizertype;
-//pub mod recursivetriangle;
+pub mod recursivetriangle;
 

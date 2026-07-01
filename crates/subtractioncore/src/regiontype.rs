@@ -1,5 +1,5 @@
 #[allow(non_camel_case_types)]
-#[derive(Copy,Clone)]
+#[derive(Copy,Clone,PartialEq,Eq,Hash)]
 #[repr(usize)]
 pub enum regiontype {
     sw,
